@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model link {
+  createdAt   DateTime @default(now())
+  description String
+  id          Int      @default(autoincrement()) @id
+  url         String
+  postedBy    user     @relation(fields: [poster], references: [id])
+  poster      Int
+}
+
+model user {
+  id          Int     @default(autoincrement()) @id
+  name        String
+  email       String  @unique
+  password    String
+  links       link[]
+}
