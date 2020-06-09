@@ -72,10 +72,30 @@ const deleteLink = async (root, args, context, info) => {
     return link;
 };
 
+const vote = async (root, args, context, info) => {
+    let userId = getUserId(context);
+    let votes = await context.prisma.vote.count({
+        where: {
+            userId: userId,
+            linkId: Number(args.linkId)
+        }
+    });
+    if (votes != 0) throw new Error(`Already voted for link: ${args.linkId}`);
+    let v = await context.prisma.vote.create({
+        data: {
+            user: { connect: { id: userId } },
+            link: { connect: { id: Number(args.linkId) } }
+        }
+    });
+    context.pubsub.publish("VOTED", v);
+    return v;
+};
+
 module.exports = {
     post,
     updateLink,
     deleteLink,
     signup,
-    login
+    login,
+    vote
 }

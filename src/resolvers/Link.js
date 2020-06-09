@@ -9,10 +9,19 @@ const postedBy = async (root, args, context, info) => {
     });
     return poster;
 };
+const votes = async (root, args, context, info) => {
+    let v = await context.prisma.votes.findMany({
+        where: {
+            linkId: root.id
+        }
+    });
+    return v;
+};
 
 module.exports = {
     id,
     description,
     url,
-    postedBy
+    postedBy,
+    votes
 }
