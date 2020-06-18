@@ -60,9 +60,16 @@ In this schema, there are 3 Prisma [models](https://www.prisma.io/docs/reference
 Model migration is still an experimental feature, so you might find some issues with columns or tables not being created per specification, I found that I needed to delete the migrations/ directory that gets created when you migrate your models (the migrations/ directory contains information on your migrations that gets used to create the tables in your database).<br/>
 **In some cases, I had to drop all the tables in my database as well and re-do the migrations.<br/>**
 Again, it is an experimental feature so there are parts that may become cumbersome, you might even find it easier to use introspection (which will be mentioned later).<br/>
-Once the migration is done, refer back to your database instance to make sure the tables are created as specified (correct columns, correct data types, etc.).
+To do the migration, navigate to the [prisma](./src/prisma) directory and complete the following commands and complete the prompts:
+```
+npx migrate save --experimental
+npx migrate up --experimental
+```
+Once the migration is done, refer back to your database instance to make sure the tables are created as specified (correct columns, correct data types, etc.).<br/>
+You can also refer to the aforementioned *migrations* directory to look at the migration info.
 
 
+> ##### Another way to match the database schema to the Prisma model
 > In Prisma, you can also create the database schema and then generate your data models based off that (database schema defines prisma model).<br/>
 This is referred to as introspection, [here's](https://www.prisma.io/docs/reference/tools-and-interfaces/introspection) a reference to more information on it in case you want to go in that direction.<br/>
 This is useful if you are more comfortable with creating your tables in SQL as opposed to using Prisma (especially if you're just starting with Prisma) or if you don't want to deal with issues that may arise with migration.
@@ -75,7 +82,7 @@ You can also opt to hard code the secret in the code however you would have to m
 In an application like this, it's fine since the secret is used in only two places: the [utils file](./src/utils.js) and the [Mutation resolver](./src/resolvers/Mutation.js).
 
 
-Once you have created the Prisma client and have a synchronized data model and database schema, you can run the application with `node index.js` and navigate to localhost:9001/graphiql to use an interactive playground to test our the API.<br/>
+Once you have added the JWT secret and finished Prisma initialization (data source setup, data model definition), you can run the application with `node index.js` and navigate to localhost:9001/graphiql to use an interactive playground to test our the API.<br/>
 Port 9001 is hardcoded into the [index.js](./index.js) file, however you can specify a different port and put it into your .env file.<br/>
 Similarily, you can also change the endpoints for the GraphQL API and the playground.<br/>
 For more information on how the server was created, I recommend the [graphql-yoga](https://github.com/prisma-labs/graphql-yoga) GitHub page for reference. 
